@@ -12,6 +12,9 @@ const articleSchema = mongoose.Schema({
     author: {
         type: String,
         required: true
+    },
+    likesCount: {
+        type: Number
     }
 }, {
     timestamps: true
