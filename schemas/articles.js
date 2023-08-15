@@ -33,6 +33,10 @@ const articleSchema = mongoose.Schema(
     summary: {
       type: String,
       required: true,
+    },
+    color_theme: {
+      type: String,
+      required: true,
     }
   },
   {
