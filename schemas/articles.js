@@ -30,6 +30,10 @@ const articleSchema = mongoose.Schema(
     likes_count: {
       type: Number,
     },
+    summary: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,
