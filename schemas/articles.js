@@ -22,7 +22,6 @@ const articleSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    data: [articleDataSchema],
     author: {
       type: String,
       required: true,
@@ -37,7 +36,12 @@ const articleSchema = mongoose.Schema(
     color_theme: {
       type: String,
       required: true,
-    }
+    },
+    category:{
+      type: String,
+      required: true,
+    },
+    data: [articleDataSchema],
   },
   {
     timestamps: true,
