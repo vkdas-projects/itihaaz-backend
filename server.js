@@ -3,8 +3,9 @@ require('dotenv').config()
 // Declarations
 const express = require(`express`)
 const app = express();
-const articleRoutes = require('./routes/articleRoutes')
+const articleRoutes = require('./routes/articles')
 const mongoose = require(`mongoose`)
+var cors = require('cors')
 
 // Middlewares
 app.use(express.json())
@@ -12,6 +13,7 @@ app.use((req, res, next)=>{
     console.log(req.path, req.method);
     next()
 })
+app.use(cors())
 
 // Routes
 app.use(`/api/articles`, articleRoutes)

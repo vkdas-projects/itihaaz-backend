@@ -1,4 +1,4 @@
-const articleSchema = require("../schemas/articleSchema");
+const articleSchema = require("../schemas/articles");
 const mongoose = require(`mongoose`);
 
 // Get All
