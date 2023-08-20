@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const {createArticle, getArticles, getSingleArticle,updateArticle ,deleteArticle} = require('../controllers/articles')
+const {createArticle, getArticles, getSingleArticle,updateArticle ,deleteArticle, getFeaturedArticles} = require('../controllers/articles')
 
 // GET all articles
 router.get("/", (req, res) => {
     getArticles(req,res)
 });
+
+router.get("/featured", (req, res) => {
+  getFeaturedArticles(req,res)
+});
+
 
 // GET a single article
 router.get("/:id", (req, res) => {

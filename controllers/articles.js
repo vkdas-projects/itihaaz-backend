@@ -4,8 +4,25 @@ const mongoose = require(`mongoose`);
 // Get All
 const getArticles = async (req, res) => {
   articleSchema
-    .find({})
+    .find({
+      is_featured: undefined
+    })
     .sort({ createdAt: -1 })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// Get Featured 
+const getFeaturedArticles = async (req, res) => {
+  articleSchema
+    .find({
+      is_featured: true
+    })
+    .sort({ createdAt: -1 }).limit(4)
     .then((result) => {
       res.status(200).json(result);
     })
@@ -89,6 +106,7 @@ const deleteArticle = async (req, res) => {
 module.exports = {
   createArticle,
   getArticles,
+  getFeaturedArticles,
   getSingleArticle,
   updateArticle,
   deleteArticle

@@ -13,7 +13,8 @@ const articleDataSchema = mongoose.Schema({
     media_dimensions: {
       height: String,
       width: String
-    }
+    },
+
   });
 
 const articleSchema = mongoose.Schema(
@@ -40,6 +41,9 @@ const articleSchema = mongoose.Schema(
     category:{
       type: String,
       required: true,
+    },
+    is_featured: {
+      type: Boolean
     },
     data: [articleDataSchema],
   },
