@@ -14,7 +14,10 @@ const articleDataSchema = mongoose.Schema({
       height: String,
       width: String
     },
-
+    card_type: {
+      type: String,
+      required: true
+    },
   });
 
 const articleSchema = mongoose.Schema(
