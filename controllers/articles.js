@@ -1,7 +1,20 @@
 const articleSchema = require("../schemas/articles");
 const mongoose = require(`mongoose`);
+// Get All 
+const getAllArticles = async (req, res) => {
+  articleSchema
+    .find()
+    .sort({ createdAt: -1 })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-// Get All
+
+// Get All except featured
 const getArticles = async (req, res) => {
   articleSchema
     .find({
@@ -105,6 +118,7 @@ const deleteArticle = async (req, res) => {
 
 module.exports = {
   createArticle,
+  getAllArticles,
   getArticles,
   getFeaturedArticles,
   getSingleArticle,

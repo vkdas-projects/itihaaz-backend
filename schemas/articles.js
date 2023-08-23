@@ -16,7 +16,6 @@ const articleDataSchema = mongoose.Schema({
     },
     card_type: {
       type: String,
-      required: true
     },
   });
 
