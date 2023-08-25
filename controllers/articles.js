@@ -1,6 +1,8 @@
 const articleSchema = require("../schemas/articles");
 const mongoose = require(`mongoose`);
-// Get All 
+const jwt = require("jsonwebtoken");
+const userSchema = require("../schemas/user");
+// Get All
 const getAllArticles = async (req, res) => {
   articleSchema
     .find()
@@ -13,12 +15,11 @@ const getAllArticles = async (req, res) => {
     });
 };
 
-
 // Get All except featured
 const getArticles = async (req, res) => {
   articleSchema
     .find({
-      is_featured: undefined
+      is_featured: undefined,
     })
     .sort({ createdAt: -1 })
     .then((result) => {
@@ -29,13 +30,14 @@ const getArticles = async (req, res) => {
     });
 };
 
-// Get Featured 
+// Get Featured
 const getFeaturedArticles = async (req, res) => {
   articleSchema
     .find({
-      is_featured: true
+      is_featured: true,
     })
-    .sort({ createdAt: -1 }).limit(4)
+    .sort({ createdAt: -1 })
+    .limit(4)
     .then((result) => {
       res.status(200).json(result);
     })
@@ -46,16 +48,37 @@ const getFeaturedArticles = async (req, res) => {
 
 // Create One
 const createArticle = async (req, res) => {
-  articleSchema
-    .create(req.body)
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+  const token = req.headers["x-access-token"];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+  try {
+    const email = decoded._doc.email;
+    const user = await userSchema.findOne({
+      email: email,
+    });
+    console.log(user);
+    if (user !== null) {
+      articleSchema
+        .create(req.body)
+        .then((result) => {
+          res.status(200).json(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      res.status(401).json({
+        message: "User not found!",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({
+      status: "error",
+      error: "invalid token",
+    });
+  }
+};
 
 // GetOne
 const getSingleArticle = async (req, res) => {
@@ -65,7 +88,9 @@ const getSingleArticle = async (req, res) => {
     });
   } else {
     articleSchema
-      .findById(req.params.id)
+      .findOne({
+        _id: req.params.id
+      })
       .then((result) => {
         res.status(200).json(result);
       })
@@ -77,43 +102,46 @@ const getSingleArticle = async (req, res) => {
 
 // Update One
 const updateArticle = async (req, res) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(404).json({
-          error: "No article found corresponding to the id given",
-        });
-      } else {
-        articleSchema
-          .findOneAndUpdate({
-            _id: req.params.id
-          }, req.body)
-          .then((result) => {
-            console.log(result);
-            res.status(200).json(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(404).json({
+      error: "No article found corresponding to the id given",
+    });
+  } else {
+    articleSchema
+      .findOneAndUpdate(
+        {
+          _id: req.params.id,
+        },
+        req.body
+      )
+      .then((result) => {
+        console.log(result);
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 // Delete One
 const deleteArticle = async (req, res) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(404).json({
-          error: "No article found corresponding to the id given",
-        });
-      } else {
-        articleSchema
-          .findOneAndDelete({
-            _id: req.params.id
-          })
-          .then((result) => {
-            res.status(200).json(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(404).json({
+      error: "No article found corresponding to the id given",
+    });
+  } else {
+    articleSchema
+      .findOneAndDelete({
+        _id: req.params.id,
+      })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 module.exports = {
@@ -123,5 +151,5 @@ module.exports = {
   getFeaturedArticles,
   getSingleArticle,
   updateArticle,
-  deleteArticle
+  deleteArticle,
 };
