@@ -14,18 +14,11 @@ const articleDataSchema = mongoose.Schema({
       height: String,
       width: String
     },
-    card_type: {
-      type: String,
-    },
   });
 
 const articleSchema = mongoose.Schema(
   {
     title: {
-      type: String,
-      required: true,
-    },
-    author: {
       type: String,
       required: true,
     },
@@ -46,6 +39,9 @@ const articleSchema = mongoose.Schema(
     },
     is_featured: {
       type: Boolean
+    },
+    no_of_slides: {
+      type: Number
     },
     data: [articleDataSchema],
   },

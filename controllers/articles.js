@@ -19,7 +19,7 @@ const getAllArticles = async (req, res) => {
 const getArticles = async (req, res) => {
   articleSchema
     .find({
-      is_featured: undefined,
+      is_featured: false,
     })
     .sort({ createdAt: -1 })
     .then((result) => {

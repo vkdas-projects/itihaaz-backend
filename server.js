@@ -10,7 +10,7 @@ var cors = require('cors')
 
 // Middlewares
 app.use(express.json({
-    limit: "2mb"
+    limit: "10mb"
 }))
 app.use((req, res, next)=>{
     console.log(req.path, req.method);
